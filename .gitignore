@@ -1,0 +1,31 @@
+# Compiled Java classes
+*.class
+
+# Java Package Files
+*.jar
+!lib/client.jar
+!lib/json-simple-1.1.1.jar
+
+# Log files
+*.log
+
+# Temporary files
+temp/
+*.tmp
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build output
+build/
+dist/
+out/
+
+# DreamBot API (should not be included in repository)
+api/
