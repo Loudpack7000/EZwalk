@@ -12,11 +12,13 @@ import org.dreambot.api.methods.input.Camera;
 import org.dreambot.api.utilities.Logger;
 import org.dreambot.api.methods.container.impl.Inventory;
 import org.dreambot.api.wrappers.items.Item;
+import org.dreambot.api.script.ScriptManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 
 @ScriptManifest(name = "EZwalk - Auto Travel", description = "Comprehensive automated travel system for RuneScape locations with energy management and random exploration feature", author = "Loud", version = 1.1, category = Category.UTILITY)
 public class EZwalk extends AbstractScript {
@@ -94,10 +96,23 @@ public class EZwalk extends AbstractScript {
     private int energyThreshold = 40;
     private long lastRunEnergyLog = 0;
 
+    // Quick Start variables
+    private boolean quickStartEnabled = false;
+    private String quickStartDestination = "";
+    private int quickStartEnergyThreshold = 40;
+    private boolean quickStartUseEnergyPotions = true;
+
     @Override
     public void onStart() {
         Logger.log("Auto Travel Script started!");
-        createGUI();
+
+        // Check for quick start parameters
+        Map<String, String> parameters = getParameters();
+        if (parameters != null && !parameters.isEmpty()) {
+            handleQuickStart(parameters);
+        } else {
+            createGUI();
+        }
     }
 
     @Override
@@ -361,6 +376,61 @@ public class EZwalk extends AbstractScript {
                 Logger.log("Dropped empty vial");
                 Sleep.sleep(600, 1000);
             }
+        }
+    }
+
+    /**
+     * Handle quick start with parameters
+     */
+    private void handleQuickStart(Map<String, String> parameters) {
+        try {
+            if (parameters.containsKey("destination")) {
+                quickStartDestination = parameters.get("destination");
+                quickStartEnabled = true;
+
+                // Find matching location
+                for (TravelLocation location : TravelLocation.values()) {
+                    if (location.name().equalsIgnoreCase(quickStartDestination) ||
+                            location.toString().equalsIgnoreCase(quickStartDestination)) {
+                        selectedLocation = location;
+                        break;
+                    }
+                }
+
+                if (selectedLocation != null) {
+                    // Optional parameters
+                    if (parameters.containsKey("energyThreshold")) {
+                        quickStartEnergyThreshold = Integer.parseInt(parameters.get("energyThreshold"));
+                        energyThreshold = quickStartEnergyThreshold;
+                    }
+
+                    if (parameters.containsKey("useEnergyPotions")) {
+                        quickStartUseEnergyPotions = Boolean.parseBoolean(parameters.get("useEnergyPotions"));
+                        useEnergyPotions = quickStartUseEnergyPotions;
+                    }
+
+                    // Start walking immediately
+                    isWalking = true;
+                    Logger.log("Quick Start: Walking to " + selectedLocation.toString());
+                    Logger.log("Quick Start: Energy threshold: " + energyThreshold + "%");
+                    Logger.log("Quick Start: Use energy potions: " + useEnergyPotions);
+                } else {
+                    Logger.log("Quick Start: Invalid destination '" + quickStartDestination
+                            + "'. Available destinations:");
+                    for (TravelLocation location : TravelLocation.values()) {
+                        Logger.log("  - " + location.name() + " (" + location.toString() + ")");
+                    }
+                    quickStartEnabled = false;
+                    createGUI();
+                }
+            } else {
+                Logger.log("Quick Start: No destination specified. Opening GUI...");
+                createGUI();
+            }
+        } catch (Exception e) {
+            Logger.log("Quick Start Error: " + e.getMessage());
+            Logger.log("Opening GUI instead...");
+            createGUI();
         }
     }
 

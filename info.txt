@@ -1,0 +1,21 @@
+Simple travel script easy to use.
+
+25+ Popular F2P Destinations
+
+-Major cities: Grand Exchange, Lumbridge, Varrock, Falador, Al Kharid, Draynor Village, Edgeville
+-Mining locations: Al Kharid Mine, Varrock East Mine, Dwarven Mine, Mining Guild
+-Training spots: Lumbridge Cow Field, Lumbridge Swamp, Security Stronghold, Barbarian Village
+-Quest areas: Draynor Manor, Black Knights' Fortress, Wizard Tower
+-Island destinations: Karamja (Musa Point), Brimhaven
+-Wilderness locations: Bandit Camp (for the brave!)
+-Special areas: Crafting Guild, Rimmington, Port Sarim
+
+Smart Energy Management
+
+-Automatic run energy monitoring and optimization
+-Intelligent energy potion detection and consumption
+-Customizable energy threshold slider (10%-80%)
+-Supports all energy potion types: Energy, Super Energy, and Stamina potions
+-Automatic empty vial cleanup to maintain inventory space
+
+TAGS walking, afk-travel, travel, utility, automation, F2P
